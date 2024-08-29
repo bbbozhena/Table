@@ -1,52 +1,39 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../redux/store";
 import Status from "./status";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-
-type DataItem = {
-  trackingId: string;
-  product: string;
-  customer: string;
-  date: string;
-  amount: string;
-  paymentMode: string;
-  status: "Delivered" | "Cancelled" | "Process";
-};
+import {
+  deleteProduct,
+  setSearchQuery,
+  setCurrentPage,
+  setItemsPerPage,
+} from "../../redux/productsSlice";
 
 type TableProps = {
   darkMode: boolean;
 };
 
 const Table: React.FC<TableProps> = ({ darkMode }) => {
-  const data: DataItem[] = [
-    {
-      trackingId: "12345",
-      product: "Laptop",
-      customer: "John Doe",
-      date: "2023-08-29",
-      amount: "$1000",
-      paymentMode: "Credit Card",
-      status: "Delivered",
-    },
-    {
-      trackingId: "67890",
-      product: "Smartphone",
-      customer: "Jane Smith",
-      date: "2023-08-28",
-      amount: "$800",
-      paymentMode: "PayPal",
-      status: "Process",
-    },
-    {
-      trackingId: "67890",
-      product: "Smartphone",
-      customer: "Jane Smith",
-      date: "2023-08-28",
-      amount: "$800",
-      paymentMode: "PayPal",
-      status: "Process",
-    },
-  ];
+  const dispatch: AppDispatch = useDispatch();
+  const { products, searchQuery, currentPage, itemsPerPage } = useSelector(
+    (state: RootState) => state.products
+  );
+
+  const filteredProducts = products.filter((product) =>
+    product["Product Name"].toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handleDelete = (trackingId: number) => {
+    dispatch(deleteProduct(trackingId));
+  };
+
   return (
     <div className="p-4">
       <div className="grid grid-cols-8 font-bold p-4 text-center">
@@ -60,10 +47,10 @@ const Table: React.FC<TableProps> = ({ darkMode }) => {
         <p>Action</p>
       </div>
 
-      {data.map((item, index) => (
+      {paginatedProducts.map((item, index) => (
         <div
-          key={index}
-          className={`grid grid-cols-8 p-4 border-t text-center ${
+          key={item["Tracking ID"]}
+          className={`grid grid-cols-8 p-4  text-center text-sm ${
             darkMode
               ? index % 2 === 0
                 ? "bg-dark-bg-line"
@@ -73,13 +60,16 @@ const Table: React.FC<TableProps> = ({ darkMode }) => {
               : "bg-white"
           }`}
         >
-          <p>{item.trackingId}</p>
-          <p>{item.product}</p>
-          <p>{item.customer}</p>
-          <p>{item.date}</p>
-          <p>{item.amount}</p>
-          <p>{item.paymentMode}</p>
-          <Status status={item.status} />
+          <p>{item["Tracking ID"]}</p>
+          <div className="flex">
+            <img src={item["Product Image"]} className="h-16 w-16" />
+            <p>{item["Product Name"]}</p>
+          </div>
+          <p>{item.Customer}</p>
+          <p>{item.Date}</p>
+          <p>{item.Amount}</p>
+          <p>{item["Payment Mode"]}</p>
+          <Status status={item.Status} />
           <div className="flex justify-center items-center">
             <button className="text-button-color h-4 w-4 m-3 left-3 top-1/2 transform -translate-y-1/2 ">
               <FontAwesomeIcon icon={faEdit} />

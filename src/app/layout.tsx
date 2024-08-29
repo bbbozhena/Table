@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import ClientWrapper from "./clientWrapper";
 import { Montserrat } from "next/font/google";
 import "../global.css";
 
@@ -21,7 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={montserrat.className}>{children}</body>
+      <body className={montserrat.className}>
+        <ClientWrapper>{children}</ClientWrapper>
+      </body>
     </html>
   );
 }
