@@ -1,25 +1,40 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store";
 import {
-  setProducts,
   setItemsPerPage,
   setCurrentPage,
+  Product,
 } from "../../redux/productsSlice";
 
 const Pagination = () => {
   const dispatch = useDispatch();
 
   const { products, itemsPerPage, currentPage, searchQuery } = useSelector(
-    (state: any) => state.products
+    (state: RootState) => state.products
   );
 
-  const totalPages = Math.ceil(products.length / itemsPerPage);
-  const filteredProducts = products.filter((product: any) =>
+  const filteredProducts = products.filter((product: Product) =>
     product["Product Name"].toLowerCase().includes(searchQuery.toLowerCase())
   );
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
-  const handleItemsPerPageChange = (e:any) => {
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      dispatch(setCurrentPage(totalPages > 0 ? totalPages : 1));
+    }
+  }, [
+    filteredProducts.length,
+    itemsPerPage,
+    searchQuery,
+    currentPage,
+    totalPages,
+    dispatch,
+  ]);
+
+  const handleItemsPerPageChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     dispatch(setItemsPerPage(Number(e.target.value)));
     dispatch(setCurrentPage(1));
   };
@@ -28,10 +43,17 @@ const Pagination = () => {
     dispatch(setCurrentPage(pageNumber));
   };
 
-  const displayedProducts = filteredProducts.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      dispatch(setCurrentPage(currentPage + 1));
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      dispatch(setCurrentPage(currentPage - 1));
+    }
+  };
 
   const renderPaginationButtons = () => {
     const paginationButtons = [];
@@ -44,8 +66,8 @@ const Pagination = () => {
         <button
           key={1}
           onClick={() => handlePageChange(1)}
-          className={`px-3 py-1 mx-1 rounded ${
-            currentPage === 1 ? "bg-blue-500 text-white" : "bg-gray-300"
+          className={`px-3 py-2 mx-1 rounded-xl ${
+            currentPage === 1 ? "bg-button-color text-white" : "bg-gray-300"
           }`}
         >
           1
@@ -66,8 +88,8 @@ const Pagination = () => {
         <button
           key={i}
           onClick={() => handlePageChange(i)}
-          className={`px-3 py-1 mx-1 rounded ${
-            currentPage === i ? "bg-blue-500 text-white" : "bg-gray-300"
+          className={`px-4 py-2  mx-1 rounded-xl ${
+            currentPage === i ? "bg-button-color text-white" : "bg-gray-300"
           }`}
         >
           {i}
@@ -88,9 +110,9 @@ const Pagination = () => {
         <button
           key={totalPages}
           onClick={() => handlePageChange(totalPages)}
-          className={`px-3 py-1 mx-1 rounded ${
+          className={`px-3 py-2 mx-1 rounded-xl ${
             currentPage === totalPages
-              ? "bg-blue-500 text-white"
+              ? "bg-button-color  text-white"
               : "bg-gray-300"
           }`}
         >
@@ -103,11 +125,24 @@ const Pagination = () => {
   };
 
   return (
-    <div>
-      {/* Пагінація */}
-      <div className="flex justify-center mt-4">
+    <div className="flex items-center mb-10">
+      <button
+        onClick={handlePreviousPage}
+        disabled={currentPage === 1}
+        className="pt-4 text-slate-400 px-3 py-1 mx-1 rounded  hover:text-slate-500"
+      >
+        Previous
+      </button>
+      <div className="flex justify-center mt-4  ">
         {renderPaginationButtons()}
       </div>
+      <button
+        onClick={handleNextPage}
+        disabled={currentPage === totalPages}
+        className="pt-4 text-slate-400 px-3 py-1 mx-1 rounded  hover:text-slate-500"
+      >
+        Next
+      </button>
     </div>
   );
 };

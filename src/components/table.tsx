@@ -60,21 +60,30 @@ const Table: React.FC<TableProps> = ({ darkMode }) => {
               : "bg-white"
           }`}
         >
-          <p>{item["Tracking ID"]}</p>
-          <div className="flex">
+          <p className="flex justify-center items-center">
+            #{item["Tracking ID"]}
+          </p>
+          <div className="flex justify-center items-center">
             <img src={item["Product Image"]} className="h-16 w-16" />
             <p>{item["Product Name"]}</p>
           </div>
-          <p>{item.Customer}</p>
-          <p>{item.Date}</p>
-          <p>{item.Amount}</p>
-          <p>{item["Payment Mode"]}</p>
-          <Status status={item.Status} />
+          <p className="flex justify-center items-center">{item.Customer}</p>
+          <p className="flex justify-center items-center">{item.Date}</p>
+          <p className="flex justify-center items-center">{item.Amount}</p>
+          <p className="flex justify-center items-center">
+            {item["Payment Mode"]}
+          </p>
+          <div className="flex justify-center items-center">
+            <Status status={item.Status} />
+          </div>
           <div className="flex justify-center items-center">
             <button className="text-button-color h-4 w-4 m-3 left-3 top-1/2 transform -translate-y-1/2 ">
               <FontAwesomeIcon icon={faEdit} />
             </button>
-            <button className="text-red-500 h-4 w-4  left-3 top-1/2 transform -translate-y-1/2 ">
+            <button
+              className="text-red-500 h-4 w-4  left-3 top-1/2 transform -translate-y-1/2 "
+              onClick={() => handleDelete(item["Tracking ID"])}
+            >
               <FontAwesomeIcon icon={faTrash} />
             </button>
           </div>

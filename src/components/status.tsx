@@ -26,7 +26,9 @@ const Status: React.FC<StatusProps> = ({ status }) => {
   }
 
   return (
-    <div className={`rounded-xl p-2 h-12 ${bgColor} ${textColor}`}>{status}</div>
+    <div className={`rounded-xl py-2 w-24 ${bgColor} ${textColor}`}>
+      {status}
+    </div>
   );
 };
 

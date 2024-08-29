@@ -23,7 +23,7 @@ const SearchInput = () => {
           type="text"
           placeholder="Search..."
           onChange={handleSearchChange}
-          className="pl-2 pr-4 py-2  bg-transparent w-38"
+          className="pl-2 pr-4 py-2  bg-transparent w-38 focus:outline-none"
         />
       </div>
     </div>

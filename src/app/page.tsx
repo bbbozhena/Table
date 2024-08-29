@@ -29,16 +29,16 @@ export default function Home() {
     fetchData();
   }, [dispatch]);
 
-  const { itemsPerPage } = useSelector((state: any) => state.products);
+  const { itemsPerPage } = useSelector((state: RootState) => state.products);
 
-  const handleItemsPerPageChange = (e: any) => {
+  const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setItemsPerPage(Number(e.target.value)));
     dispatch(setCurrentPage(1));
   };
 
   return (
     <div
-      className={`mt-6 ${
+      className={`pt-6 ${
         darkMode ? "dark bg-dark-bg text-white" : "bg-white text-black"
       }`}
     >
@@ -53,7 +53,7 @@ export default function Home() {
               step="1"
               value={itemsPerPage}
               onChange={handleItemsPerPageChange}
-              className={`border rounded-md p-2 w-12  mx-5 ${
+              className={`border rounded-md p-2 w-12  mx-5  ${
                 darkMode
                   ? "dark bg-dark-counter-button text-white border-none"
                   : "bg-light-counter-button text-black"
