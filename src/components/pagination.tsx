@@ -129,7 +129,7 @@ const Pagination = () => {
       <button
         onClick={handlePreviousPage}
         disabled={currentPage === 1}
-        className="pt-4 text-slate-400 px-3 py-1 mx-1 rounded  hover:text-slate-500"
+        className="pt-4 text-slate-400 px-3 py-1 mx-1 rounded absolute left-35p hover:text-slate-500"
       >
         Previous
       </button>
@@ -139,7 +139,7 @@ const Pagination = () => {
       <button
         onClick={handleNextPage}
         disabled={currentPage === totalPages}
-        className="pt-4 text-slate-400 px-3 py-1 mx-1 rounded  hover:text-slate-500"
+        className="pt-4 text-slate-400 px-3 py-1 mx-1 rounded absolute right-35p hover:text-slate-500"
       >
         Next
       </button>

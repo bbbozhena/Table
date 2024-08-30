@@ -6,7 +6,7 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  darkMode: 'class',
+  darkMode: "class",
   theme: {
     extend: {
       backgroundImage: {
@@ -22,6 +22,9 @@ const config: Config = {
         "light-counter-button": "#E0E0E0",
         "dark-counter-button": "#141432",
         "button-color": "#624DE3",
+      },
+      spacing: {
+        "35p": "35%",
       },
     },
   },
